@@ -1,0 +1,31 @@
+---
+import Card from '../components/Card.astro'
+const remoteData = await fetch('https://api.jikan.moe/v3/top/anime/1').then(response => response.json());
+---
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Testing out the API</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="/style/global.css">
+    <link rel="stylesheet" href="/style/home.css">
+    <style lang="scss">
+    .grid {
+        margin: 4rem;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+         @media (max-width: 650px) {
+          grid-template-columns: repeat(1, 1fr);
+          margin: 2rem;
+        }
+        gap: 3rem;
+    }
+    </style>
+</head>
+<body>
+    <main class="grid">
+        {remoteData.top.map((item) => <Card title={item.title} score={item.score} episodes={item.episodes} href={item.url} image={item.image_url}  />)}
+    </main>
+</body>
+</html>

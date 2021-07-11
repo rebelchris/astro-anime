@@ -1,0 +1,45 @@
+---
+export interface Props {
+  title: string;
+  image: string;
+  episodes: number;
+  score: float;
+  href: string
+}
+
+const { title, image, episodes, score, href  } = Astro.props;
+---
+<article>
+    <img src={image} alt={title} />
+    <div class="content">
+        <a href={href}><h2>{title}</h2></a>
+        <p>📺 Episodes: {episodes}</p>
+        <p>⭐️ Rating: {score}</p>
+    </div>
+</article>
+
+<style>
+    article {
+        line-height: 1.5;
+        background: #fff;
+        border-radius: 8px;
+        color: #333;
+        overflow: hidden;
+    }
+    img {
+        max-height: 290px;
+        width: 100%;
+        -o-object-fit: cover;
+        object-fit: cover;
+    }
+    .content {
+        padding: 1rem;
+    }
+    h2 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    ul {
+        list-style: none;
+    }
+</style>
