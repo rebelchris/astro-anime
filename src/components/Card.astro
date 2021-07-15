@@ -1,5 +1,6 @@
 ---
 export interface Props {
+    id: number;
   title: string;
   image: string;
   episodes: number;
@@ -7,7 +8,7 @@ export interface Props {
   href: string
 }
 
-const { title, image, episodes, score, href  } = Astro.props;
+const { title, image, episodes, score, href, id  } = Astro.props;
 ---
 <article>
     <img src={image} alt={title} />
@@ -15,6 +16,7 @@ const { title, image, episodes, score, href  } = Astro.props;
         <a href={href}><h2>{title}</h2></a>
         <p>📺 Episodes: {episodes}</p>
         <p>⭐️ Rating: {score}</p>
+        <a href={`/show/${id}`}>Read more &rarr;</a>
     </div>
 </article>
 
