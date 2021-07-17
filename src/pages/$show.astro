@@ -1,0 +1,59 @@
+---
+const { collection } = Astro.props;
+
+export async function createCollection() {
+  const remoteData = await fetch('https://kitsu.io/api/edge/anime?sort=-averageRating')
+  const remoteJson = await remoteData.json();
+  const allData = remoteJson.data;
+  
+  return {
+    routes: allData.map((show, i) => {
+      const params = {name: show.attributes.canonicalTitle, index: show.id};
+      return params;
+    }),
+    permalink: ({ params }) => `/show/${params.index}`, 
+    async data({ params }) {
+      const show = allData.filter(show => show.id == params.index);
+      const episodes = await fetch(`https://kitsu.io/api/edge/episodes?filter[mediaId]=${params.index}}`).then(response => response.json());
+      show[0] = {...show[0], ...{episodes: episodes.data}};
+	    return show;
+    },
+    pageSize: Infinity,
+  }
+}
+---
+<html lang="en">
+  <head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Anime show: {collection.params?.name}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="/style/global.css">
+    <link rel="stylesheet" href="/style/home.css">
+    <style lang="scss">
+    .container {
+        margin: 4rem;
+        display: grid;
+         @media (max-width: 650px) {
+          margin: 2rem;
+        }
+    }
+    a, p {
+        margin-bottom: 0.5rem;
+    }
+    h1 {
+        margin-bottom: 1rem;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <a href="/">&larr; Go back</a>
+        <h1>{collection.params?.name}</h1>
+        <p>These are all episodes for this show:</p>
+        <ul class="list">
+            {collection.data[0]?.episodes.map((item) => <li>{item.attributes.number} - {item.attributes.canonicalTitle}</li>)}
+        </ul>
+     </div>
+  </body>
+</html>

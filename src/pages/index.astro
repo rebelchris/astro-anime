@@ -1,6 +1,6 @@
 ---
 import Card from '../components/Card.astro'
-const remoteData = await fetch('https://api.jikan.moe/v3/top/anime/1').then(response => response.json());
+const remoteData = await fetch('https://kitsu.io/api/edge/anime?sort=-averageRating').then(response => response.json());
 ---
 <html lang="en">
 <head>
@@ -25,7 +25,7 @@ const remoteData = await fetch('https://api.jikan.moe/v3/top/anime/1').then(resp
 </head>
 <body>
     <main class="grid">
-        {remoteData.top.map((item) => <Card title={item.title} score={item.score} episodes={item.episodes} href={item.url} image={item.image_url}  />)}
+        {remoteData.data.map((item) => <Card id={item.id} title={item.attributes.canonicalTitle} score={item.attributes.averageRating} episodes={item.attributes.totalLength} image={item.attributes.posterImage.medium}  />)}
     </main>
 </body>
 </html>
